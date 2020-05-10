@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const axios = require("axios");
 
 // create express
 const app = express();
@@ -26,6 +27,17 @@ if (process.env.NODE_ENV === "production") {
   );
 }
 
+const BASE_URL = "https://openapi.naver.com";
+const CLIENT_ID = process.env["CLIENT_ID"];
+const CLIENT_SECRET = process.env["CLIENT_SECRET"];
+const baseAPI = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "X-Naver-Client-Id": CLIENT_ID,
+    "X-Naver-Client-Secret": CLIENT_SECRET,
+  },
+});
+
 // api
 app.get(`/data`, (req, res) => {
   const data = {
@@ -34,6 +46,28 @@ app.get(`/data`, (req, res) => {
   };
   res.json(data);
 });
+app.get(
+  //rank 정보를 얻기위함.
+  `/pc`,
+  (req, res) => {
+    getPCRoomInfo(res);
+  }
+);
+// 피시방 정보를 가져옵니다.
+const getPCRoomInfo = async (res) => {
+  baseAPI
+    .get(
+      `/v1/search/local.json?query=%EC%A3%BC%EC%8B%9D&display=10&start=1&sort=random`
+    )
+    .then((Data) => {
+      console.log(Data);
+      res.send(Data.data);
+    })
+    .catch((err) => {
+      res.status(400).send("error");
+      console.log(err);
+    });
+};
 
 // Listen PORT
 const PORT = process.env.PORT || 5000;

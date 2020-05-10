@@ -1,6 +1,7 @@
 import React, { useState, Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { api } from "./api/pc_room";
 const { kakao } = window;
 class PopUp extends Component {
   constructor(props) {
@@ -33,9 +34,16 @@ function App() {
   // fetch("/data")
   //   .then((res) => res.json())
   //   .then((data) => setData(data));
+  const onSubmit = async () => {
+    const result = await api.getPCRoomInfo();
+    console.log(result);
+  };
   return (
     <div className="App">
       <PopUp />
+      <div onClick={() => onSubmit()}>
+        <span>검색</span>
+      </div>
     </div>
   );
 }
