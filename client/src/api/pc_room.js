@@ -12,4 +12,8 @@ export const api = {
     const result = await axios.get(`/info`);
     return result.data.result.site.list;
   },
+  getCafeInfo: async () => {
+    const result = await axios.get(`/cafe/info`);
+    return result.data.result.site.list;
+  },
 };

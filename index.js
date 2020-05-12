@@ -50,20 +50,15 @@ app.get(`/data`, (req, res) => {
   };
   res.json(data);
 });
-app.get(
-  //rank 정보를 얻기위함.
-  `/pc`,
-  (req, res) => {
-    getPCRoomInfo(res);
-  }
-);
-app.get(
-  //rank 정보를 얻기위함.
-  `/info`,
-  (req, res) => {
-    getInfo(res);
-  }
-);
+app.get(`/pc`, (req, res) => {
+  getPCRoomInfo(res);
+});
+app.get(`/info`, (req, res) => {
+  getInfo(res);
+});
+app.get(`/cafe/info`, (req, res) => {
+  getCafeInfo(res);
+});
 
 // 피시방 정보를 가져옵니다.
 const getPCRoomInfo = async (res) => {
@@ -85,6 +80,21 @@ const getInfo = async (res) => {
   infoAPI
     .get(
       `/search2/searchMore.nhn?query=%EC%9B%90%EB%8B%B9%EC%97%AD%20%ED%94%BC%EC%8B%9C%EB%B0%A9&sm=clk&style=v5&page=1&displayCount=75&type=SITE_1`
+      // `/search2/searchMore.nhn?query=%ED%94%BC%EC%8B%9C%EB%B0%A9&siteSort=1&sm=clk&page=1&displayCount=75&type=SITE_1`
+    )
+    .then((Data) => {
+      console.log(Data);
+      res.send(Data.data);
+    })
+    .catch((err) => {
+      res.status(400).send("error");
+      console.log(err);
+    });
+};
+const getCafeInfo = async (res) => {
+  infoAPI
+    .get(
+      `/search2/searchMore.nhn?query=%EC%9B%90%EB%8B%B9%EC%97%AD%20%EC%B9%B4%ED%8E%98&sm=clk&style=v5&page=1&displayCount=75&type=SITE_1`
       // `/search2/searchMore.nhn?query=%ED%94%BC%EC%8B%9C%EB%B0%A9&siteSort=1&sm=clk&page=1&displayCount=75&type=SITE_1`
     )
     .then((Data) => {
